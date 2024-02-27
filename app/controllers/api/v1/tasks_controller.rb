@@ -4,13 +4,13 @@ module Api
             before_action :set_task, only: [ :show, :update, :destroy, :complete ]
 
             def index
-                tasks = Task.all
+                tasks = Task.all.order(:id)
 
                 render json: TaskSerializer.new(tasks)
             end
 
             def show
-                render json: TaskSerializer.new(task)
+                render json: TaskSerializer.new(@task)
             end
 
             def create
@@ -25,40 +25,43 @@ module Api
             end
 
             def update
-                if task.update(task_params)
-                    render json: TaskSerializer.new(task)
+                if @task.update(task_params)
+                    render json: TaskSerializer.new(@task)
                 else
-                    render json: { error: task.errors.messages }
+                    render json: { error: @task.errors.messages }
                 end
             end
             
             def destroy
-                if task.destroy
+                if @task.destroy
                     head :no_content
                 else
-                    render json: { error: task.errors.messages }
+                    render json: { error: @task.errors.messages }
                 end
 
             end
 
             def complete
-                if task.update(task_params)
-                  redirect_to tasks_path, notice: 'Task marked as completed.'
+                if @task.update(task_params)
+                    render json: { message: 'Task marked as completed.', task: @task }
                 else
-                  render :index, alert: "Failed to mark task as completed."
+                    render json: { message: "Failed to mark task as completed.", errors: @task.errors.full_messages }, status: :unprocessable_entity
                 end
             end
 
             private
 
             def set_task
-                task = Task.find(params[:id])
+                @task = Task.find(params[:id])
             end
 
             def task_params
-                params.require(:task).permit(:title, :description, :image_url, :repititions, :sets, :completed, :user_id, :category_id)
+                params.require(:task).permit(:title, :description, :image_url, :repetitions, :sets, :completed, :user_id, :category_id)
             end
         
+            def options
+                @options ||= { include: [:categories]}
+            end
         end
     end
 end

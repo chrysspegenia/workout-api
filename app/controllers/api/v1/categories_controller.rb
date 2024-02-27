@@ -5,13 +5,13 @@ module Api
 
 
             def index
-                categories = Category.all
+                categories = Category.all.order(:id)
 
-                render json: CategorySerializer.new(categories)
+                render json: CategorySerializer.new(categories, options)
             end
 
             def show
-                render json: CategorySerializer.new(category)
+                render json: CategorySerializer.new(@category, options)
             end
 
             def create
@@ -22,24 +22,22 @@ module Api
                 else
                     render json: { error: category.errors.messages }
                 end
-
             end
 
             def update
-                if category.update(category_params)
-                    render json: CategorySerializer.new(category)
+                if @category.update(category_params)
+                    render json: CategorySerializer.new(@category, options)
                 else
-                    render json: { error: category.errors.messages }
+                    render json: { error: @category.errors.messages }
                 end
 
             end
 
-            
             def destroy
-                if category.destroy
+                if @category.destroy
                     head :no_content
                 else
-                    render json: { error: category.errors.messages }
+                    render json: { error: @category.errors.messages }
                 end
 
             end
@@ -47,13 +45,16 @@ module Api
             private
 
             def set_category
-                category = Category.find(params[:id])
+                @category = Category.find(params[:id])
             end
 
             def category_params
                 params.require(:category).permit(:title, :description, :user_id, :image_url)
             end
         
+            def options
+                @options ||= { include: [:tasks]}
+            end
             
         end
     end
