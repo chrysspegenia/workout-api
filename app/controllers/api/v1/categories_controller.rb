@@ -1,6 +1,9 @@
 module Api
     module V1
         class CategoriesController <ApplicationController
+            before_action :set_category, only: [ :show, :update, :destroy ]
+
+
             def index
                 categories = Category.all
 
@@ -8,8 +11,6 @@ module Api
             end
 
             def show
-                category = Category.find(params[:id])
-
                 render json: CategorySerializer.new(category)
             end
 
@@ -25,8 +26,6 @@ module Api
             end
 
             def update
-                category = Category.find(params[:id])
-                
                 if category.update(category_params)
                     render json: CategorySerializer.new(category)
                 else
@@ -37,8 +36,6 @@ module Api
 
             
             def destroy
-                category = Category.find(params[:id])
-                
                 if category.destroy
                     head :no_content
                 else
@@ -49,8 +46,12 @@ module Api
 
             private
 
+            def set_category
+                category = Category.find(params[:id])
+            end
+
             def category_params
-                params.require(:category).permit(:title, :description, :user_id)
+                params.require(:category).permit(:title, :description, :user_id, :image_url)
             end
         
             
