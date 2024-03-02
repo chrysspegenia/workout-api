@@ -1,10 +1,11 @@
 module Api
     module V1
         class TasksController <ApplicationController
+            before_action :authenticate_user!
             before_action :set_task, only: [ :show, :update, :destroy, :complete ]
 
             def index
-                tasks = Task.all.order(:id)
+                tasks = current_user.tasks.order(:id)
 
                 render json: TaskSerializer.new(tasks)
             end
@@ -52,7 +53,7 @@ module Api
             private
 
             def set_task
-                @task = Task.find(params[:id])
+                @task = current_user.tasks.find(params[:id])
             end
 
             def task_params

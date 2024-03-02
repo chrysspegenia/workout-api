@@ -1,12 +1,11 @@
 module Api
     module V1
         class CategoriesController <ApplicationController
+            before_action :authenticate_user!
             before_action :set_category, only: [ :show, :update, :destroy ]
 
-
             def index
-                categories = Category.all.order(:id)
-
+                categories = current_user.categories.order(:id)
                 render json: CategorySerializer.new(categories, options)
             end
 
@@ -45,11 +44,11 @@ module Api
             private
 
             def set_category
-                @category = Category.find(params[:id])
+                @category = current_user.categories.find(params[:id])
             end
 
             def category_params
-                params.require(:category).permit(:title, :description, :user_id, :image_url)
+                params.require(:category).permit(:title, :description, :image_url, :user_id)
             end
         
             def options
