@@ -14,7 +14,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :categories
+      resources :categories do
+        get 'tasks', to: 'tasks#index_category_tasks'
+      end
       resources :tasks do
         member do
           patch :completed

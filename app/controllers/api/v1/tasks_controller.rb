@@ -3,6 +3,7 @@ module Api
         class TasksController <ApplicationController
             before_action :authenticate_user!
             before_action :set_task, only: [ :show, :update, :destroy, :complete ]
+            before_action :set_category, only: [:index_category_tasks]
 
             def index
                 tasks = current_user.tasks.order(:id)
@@ -50,14 +51,24 @@ module Api
                 end
             end
 
+            def index_category_tasks
+                tasks = @category.tasks.where(user_id: current_user.id)
+
+                render json: TaskSerializer.new(tasks)
+            end
+
             private
 
             def set_task
                 @task = current_user.tasks.find(params[:id])
             end
 
+            def set_category
+                @category = Category.find((params[:category_id]))
+            end
+              
             def task_params
-                params.require(:task).permit(:title, :description, :image_url, :repetitions, :sets, :completed, :user_id, :category_id)
+                params.require(:task).permit(:title, :description, :image_url, :repetitions, :sets, :completed, :category_id).merge(user_id: current_user.id)
             end
         
             def options
