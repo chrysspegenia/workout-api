@@ -48,7 +48,7 @@ module Api
             end
 
             def category_params
-                params.require(:category).permit(:title, :description, :image_url, :user_id)
+                params.require(:category).permit(:title, :description, :image_url).merge(user_id: current_user.id)
             end
         
             def options
