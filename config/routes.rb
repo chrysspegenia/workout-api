@@ -19,7 +19,7 @@ Rails.application.routes.draw do
       end
       resources :tasks do
         member do
-          patch :completed
+          patch :complete
         end
       end
     end

@@ -44,15 +44,16 @@ module Api
             end
 
             def complete
-                if @task.update(task_params)
-                    render json: { message: 'Task marked as completed.', task: @task }
+                if @task.update(completed: !@task.completed)
+                    message = @task.completed ? 'Task marked as completed' : 'Task marked as incomplete'
+                    render json: { message: message, task: @task }
                 else
                     render json: { message: "Failed to mark task as completed.", errors: @task.errors.full_messages }, status: :unprocessable_entity
                 end
             end
 
             def index_category_tasks
-                tasks = @category.tasks.where(user_id: current_user.id)
+                tasks = @category.tasks.where(user_id: current_user.id).order(:id)
 
                 render json: TaskSerializer.new(tasks)
             end
