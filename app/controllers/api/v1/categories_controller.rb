@@ -5,7 +5,7 @@ module Api
             before_action :set_category, only: [ :show, :update, :destroy ]
 
             def index
-                categories = current_user.categories.order(:id)
+                categories = current_user.categories.order(id: :desc)
                 render json: CategorySerializer.new(categories, options)
             end
 

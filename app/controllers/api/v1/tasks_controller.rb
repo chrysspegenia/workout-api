@@ -6,7 +6,7 @@ module Api
             before_action :set_category, only: [:index_category_tasks]
 
             def index
-                tasks = current_user.tasks.order(:id)
+                tasks = current_user.tasks.order(id: :desc)
 
                 render json: TaskSerializer.new(tasks)
             end
@@ -53,7 +53,7 @@ module Api
             end
 
             def index_category_tasks
-                tasks = @category.tasks.where(user_id: current_user.id).order(:id)
+                tasks = @category.tasks.where(user_id: current_user.id).order(id: :desc)
 
                 render json: TaskSerializer.new(tasks)
             end
