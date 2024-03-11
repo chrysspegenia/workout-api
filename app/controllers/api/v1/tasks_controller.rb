@@ -58,6 +58,11 @@ module Api
                 render json: TaskSerializer.new(tasks)
             end
 
+            def due_today
+                tasks = current_user.tasks.where(due_date: Date.today).order(id: :desc)
+                render json: TaskSerializer.new(tasks)
+            end
+
             private
 
             def set_task
@@ -69,7 +74,7 @@ module Api
             end
               
             def task_params
-                params.require(:task).permit(:title, :description, :image_url, :repetitions, :sets, :completed, :category_id).merge(user_id: current_user.id)
+                params.require(:task).permit(:title, :description, :image_url, :repetitions, :sets, :completed, :category_id, :due_date).merge(user_id: current_user.id)
             end
         
             def options

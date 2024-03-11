@@ -21,6 +21,9 @@ Rails.application.routes.draw do
         member do
           patch :complete
         end
+        collection do
+          get :due_today
+        end
       end
     end
   end
