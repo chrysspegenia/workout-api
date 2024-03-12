@@ -3,4 +3,7 @@ class Task < ApplicationRecord
   belongs_to :category
 
   # has_many :categories
+
+  validates :title, presence: true
+  validates :description, presence: true
 end
