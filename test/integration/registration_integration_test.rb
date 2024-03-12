@@ -12,7 +12,7 @@ class RegistrationIntegrationTest < ActionDispatch::IntegrationTest
     @invalid_user = {
       name: "John Doe",
       email: "john_doe_email.com", #{wrong email format}
-      password: "123" #{password tooo short}
+      password: "123" #{password too short}
     }
   end
 
