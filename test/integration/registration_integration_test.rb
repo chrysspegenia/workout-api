@@ -19,19 +19,11 @@ class RegistrationIntegrationTest < ActionDispatch::IntegrationTest
   test "registration success test" do
     post '/signup', params: { user: @user}
     assert_response :success
-
-    # response.status === 200 ? 
-    #   (puts "#{User.name} has successfully registered.") 
-    #   : (puts "Error: account registration failed")
   end
 
   test "registration FAILED test" do
     post '/signup', params: { user: @invalid_user}
     assert_response :unprocessable_entity
-
-    # response.status === 422 ?
-    # (puts "Error: account registration failed") 
-    # : (puts "User has successfully registered.")
   end
 
 end
