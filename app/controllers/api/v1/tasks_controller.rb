@@ -3,7 +3,6 @@ module Api
         class TasksController <ApplicationController
             before_action :authenticate_user!
             before_action :set_task, only: [ :show, :update, :destroy, :complete ]
-            before_action :set_category, only: [:index_category_tasks]
 
             def index
                 tasks = current_user.tasks.order(id: :desc)
@@ -53,6 +52,7 @@ module Api
             end
 
             def index_category_tasks
+                set_category
                 tasks = @category.tasks.where(user_id: current_user.id).order(id: :desc)
 
                 render json: TaskSerializer.new(tasks)
