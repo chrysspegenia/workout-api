@@ -1,16 +1,12 @@
 module Api
     module V1
         class TasksController <ApplicationController
-            before_action :set_task, only: [ :show, :update, :destroy, :complete ]
+            before_action :set_task, only: [ :update, :destroy, :complete ]
 
             def index
                 tasks = current_user.tasks.order(id: :desc)
 
                 render json: TaskSerializer.new(tasks)
-            end
-
-            def show
-                render json: TaskSerializer.new(@task)
             end
 
             def create
