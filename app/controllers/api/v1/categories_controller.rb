@@ -1,11 +1,15 @@
 module Api
     module V1
         class CategoriesController <ApplicationController
-            before_action :set_category, only: [ :update, :destroy ]
+            before_action :set_category, only: [ :show, :update, :destroy ]
 
             def index
                 categories = current_user.categories.order(id: :desc)
                 render json: CategorySerializer.new(categories, options)
+            end
+
+            def show
+                render json: CategorySerializer.new(@category, options)
             end
 
             def create
