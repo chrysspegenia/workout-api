@@ -52,7 +52,7 @@ module Api
 
             def index_category_tasks
                 set_category
-                tasks = @category.tasks.where(user_id: current_user.id).order(id: :desc)
+                tasks = @category.tasks.order(id: :desc)
 
                 render json: TaskSerializer.new(tasks)
             end
